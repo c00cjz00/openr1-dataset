@@ -1,4 +1,5 @@
 ## openr1-dataset
+介紹: 輸入問題, 執行思考資料生成, 翻譯成繁體中文, 並上傳到HF
 ### 1. Install
 ```bash=
 sudo apt install git-lfs
