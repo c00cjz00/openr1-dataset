@@ -44,7 +44,7 @@ source openr1/bin/activate
 python  dataset_api_s2twp.py
 ```
 
-### Run dataset_api_s2twp.py (<think>資料生成</think>+翻譯成繁體中玟)
+### Run dataset_api_s2twp.py (<think>資料生成</think>+翻譯成繁體中文)
 #### Edit dataset_api_s2twp.py
 - 修改以下設定欄位資料 
 ```python=
