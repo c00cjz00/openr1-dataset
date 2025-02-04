@@ -1,5 +1,5 @@
 ## openr1-dataset
-### Install
+### 1. Install
 ```bash=
 sudo apt install git-lfs
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -9,12 +9,14 @@ uv venv openr1 --python 3.11 && source openr1/bin/activate && uv pip install --u
 uv pip install "distilabel>=1.5.2"
 uv pip install openai opencc beautifulsoup4 Pillow
 ```
-### HF login
+### 2. HF login
+請產生具備write權限的key
 ```bash=
 huggingface-cli login
 ```
 
-### Run dataset_api.py (<think>資料生成</think>)
+### 3. Run dataset_api.py (<think>資料生成</think>)
+輸入問題, 執行思考資料生成, 並上傳到HF
 #### Edit dataset_api.py
 - 修改以下設定欄位資料 
 ```python=
@@ -44,7 +46,8 @@ source openr1/bin/activate
 python  dataset_api_s2twp.py
 ```
 
-### Run dataset_api_s2twp.py (<think>資料生成</think>+翻譯成繁體中文)
+### 4. Run dataset_api_s2twp.py (<think>資料生成</think>+翻譯成繁體中文)
+輸入問題, 執行思考資料生成, 翻譯成繁體中文, 並上傳到HF
 #### Edit dataset_api_s2twp.py
 - 修改以下設定欄位資料 
 ```python=
@@ -83,6 +86,7 @@ python  dataset_api_s2twp.py
 ```
 
 ### Input/Output
+輸入問題及產出資料
 #### Input (string)
 ```txt=
 女寶寶，剛7歲，這一年，察覺到，我家孩子身上肉很多，而且，食量非常的大，平時都不喜歡吃去玩，請問：小兒肥胖超重該如何治療
