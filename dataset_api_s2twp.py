@@ -8,12 +8,12 @@ from distilabel.models.llms import OpenAILLM  # 引入 OpenAI LLM 模型
 import json  # 用於將字典轉換為 JSON 字串
 
 # 資料相關設定
-pipeline_id = "pipeline01-s2twp"  # 管道 ID
+pipeline_id = "pipeline02-s2twp"  # 管道 ID
 source_hf_repo_id = "ticoAg/Chinese-medical-dialogue" # 資料來源 Hugging Face 的 repository ID
 question_column_name = "input"  # 在 Hugging Face 數據集中的問題欄位名稱
 data_num = 10    # 加載數據集並選擇前 10 條數據
 distill_num_generations = 2  # 進行的 QA 生成 distillation 次數
-save2hf_repo_id = "c00cjz00/pipeline01-deepseek-r1-s2twp"  # 儲存至 Hugging Face 的 repository ID
+save2hf_repo_id = "c00cjz00/pipeline02-deepseek-r1-s2twp"  # 儲存至 Hugging Face 的 repository ID
 
 # 設定 模型 API 請求的基礎 URL 和金鑰
 base_url = r"https://medusa-poc.genai.nchc.org.tw/v1"  # 服務的 API 基礎 URL
