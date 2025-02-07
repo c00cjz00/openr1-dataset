@@ -19,7 +19,7 @@
   # --hf-dataset-config tw-instruct-500k \
   # --hf-dataset-split train \
   # --dataset_select 2 \
-  # --hf-output-dataset c00cjz00/open-r-pipeline25 \
+  # --hf-output-dataset c00cjz00/open-r-pipeline2 \
   # --vllm-server-url https://medusa-poc.genai.nchc.org.tw/v1 \
   # --model DeepSeek-R1 \
   # --temperature 0.6 \
