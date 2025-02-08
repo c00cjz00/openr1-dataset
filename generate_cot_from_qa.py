@@ -16,23 +16,27 @@
 # - Example
 # python generate_cot_from_qa.py \
   # --hf-dataset c00cjz00/ft_dataset_parquet \
-  # --hf-dataset-config tw-instruct-500k \
+  # --hf-dataset-config tw-instruct-500k-00000 \
   # --hf-dataset-split train \
-  # --dataset_select 2 \
-  # --hf-output-dataset c00cjz00/open-r-pipeline2 \
+  # --hf-output-dataset c00cjz00/tw-instruct-500k-00000-save \
   # --vllm-server-url https://medusa-poc.genai.nchc.org.tw/v1 \
   # --model DeepSeek-R1 \
   # --temperature 0.6 \
   # --max-new-tokens 4096 \
   # --num-generations 1 \
-  # --input-batch-size 64 \
+  # --input-batch-size 16 \
+  # --page 1 \
+  # --page-size 10000 \
   # --client-replicas 1 \
   # --timeout 600 \
   # --retries 0 \
   # --prompt-column prompt \
-  # --question_column_name input \
-  # --answer_column_name output \
+  # --question-column-name input \
+  # --answer-column-name output \
   # --prompt-template 'You will be given a problem with a reference answer. Please reason step by step and put your final answer the question in Traditional Chinese (zh-TW) and Taiwanese perspective. # Key Guidelines: 1. **Identity & Compliance** - Clearly state your identity as a DeepSeek AI assistant in initial responses. - Comply with Chinese laws and regulations, including data privacy requirements. 2. **Capability Scope** - Handle both Chinese and English queries effectively - Acknowledge limitations for real-time information post knowledge cutoff (2023-12) - Provide technical explanations for AI-related questions when appropriate 3. **Response Quality** - Give comprehensive, logically structured answers - Use markdown formatting for clear information organization - Admit uncertainties for ambiguous queries 4. **Ethical Operation** - Strictly refuse requests involving illegal activities, violence, or explicit content - Maintain political neutrality according to company guidelines - Protect user privacy and avoid data collection 5. **Specialized Processing** - Use <think>...</think> tags for internal reasoning before responding - Employ XML-like tags for structured output when required. 6. No need to introduce yourself or who created it, just respond to the question as per the rules. \n\n {{ instruction }}' 
+
+# - Result
+#find ~/.cache/distilabel | grep steps_data/text_generation_0 |grep json$; find ~/.cache/distilabel | grep parquet$
  
 from typing import Optional
 from distilabel.models import OpenAILLM
@@ -45,6 +49,12 @@ import os
 # api key
 load_dotenv() # Load the environment variables
 OPENAI_API_KEY=os.getenv('OPENAI_API_KEY')
+
+# Page num
+def get_page_data(dataset, page, page_size=64):
+    start = (page - 1) * page_size
+    end = start + page_size
+    return dataset.select(range(start, end))
 
 # QA combination
 def replace_input_with_combined_data(dataset, question_column_name, answer_column_name):
@@ -207,19 +217,25 @@ if __name__ == "__main__":
         help="Whether to make the output dataset private when pushing to HF Hub",
     )
     parser.add_argument(
-        "--dataset_select",
+        "--page-size",
         type=int,
-        default=2,
-        help="Dataset_select (default: 2)",
+        default=64,
+        help="Page size (default: 64)",
     )
     parser.add_argument(
-        "--question_column_name",
+        "--page",
+        type=int,
+        default=0,
+        help="page (default: 0)",
+    )    
+    parser.add_argument(
+        "--question-column-name",
         type=str,
         default="input",
         help="HF dataset question column",
     )
     parser.add_argument(
-        "--answer_column_name",
+        "--answer-column-name",
         type=str,
         default="output",
         help="HF dataset answer column",
@@ -235,7 +251,8 @@ if __name__ == "__main__":
     dataset = load_dataset(args.hf_dataset, args.hf_dataset_config, split=args.hf_dataset_split)
     #dataset = load_dataset(args.hf_dataset, data_files=f"tw-instruct-500k/train-00001-of-00050.parquet", split="train")
     # datan select
-    dataset = dataset.select(range(args.dataset_select))
+    #dataset = dataset.select(range(args.dataset_select))
+    dataset = get_page_data(dataset, page=args.page, page_size=args.page_size)
     # datasets_combination
     datasets_combination = replace_input_with_combined_data(dataset, args.question_column_name, args.answer_column_name) 
     print("Dataset loaded!")
