@@ -37,12 +37,12 @@ python generate_cot_from_Q.py \
 ```
 
 ### 執行範例二 (需要有Q+A)
-- Example
---page 1 --page-size 10000 (讀取資料0:9999)
+- 讀取資料0:9999
+```
+--page 1 --page-size 10000
+```
+- 執行程式
 ```python=
-- Example
-# - Example
-- Example
 python generate_cot_from_qa.py \
   --hf-dataset c00cjz00/ft_dataset_parquet \
   --hf-dataset-config tw-instruct-500k-00000 \
